@@ -1,16 +1,31 @@
 import axios from 'axios';
 import logger from './logger';
 
+/**
+ * wrapper function to get and pass urlRoot
+ * @param urlRoot base url of API endpoint
+ * @returns hash-map of transaction date and balance
+ */
 export const getTransactions = async (urlRoot: string): Promise<Map<string, number>> => {
 
 
   const transactions: Transaction[] = [];
   
 
+  /**
+   * Recursive function to fetch from API until the last page is read.
+   * Time Complexity: O(n * m) n = no. of pages, m = no. of transactions per page.
+   * 
+   * @param page page to fetch. by default page = 1
+   * @param processed number of transactions read
+   * @returns void
+   */
   const getTransactionPage = async (page: number = 1, processed: number = 0): Promise<void> => {
   
     try {
       const { data } = await axios.get<TransactionPage>(`${urlRoot}/${page}.json`);
+      if(data.totalCount === 0) return;
+
       processed = processed + data.transactions?.length; 
       transactions.push(...data.transactions);
     
@@ -24,13 +39,19 @@ export const getTransactions = async (urlRoot: string): Promise<Map<string, numb
   };
 
   await getTransactionPage();
-  return process(transactions);
+  return await process(transactions);
 
 };
 
-export const process = (transactions: Transaction[]): Map<string, number> => {
+/**
+ * Accepts transactions, processes to return a hashmap of daily balances
+ * @param transactions transactions to calculate balances
+ * @returns HashMap of daily balances
+ */
+export const process = async (transactions: Transaction[]): Promise<Map<string, number>> => {
 
   const map = new Map<string, number>();
+
   transactions.forEach(t => { 
     let amount = parseFloat(t.Amount);
 
