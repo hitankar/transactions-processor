@@ -31,4 +31,4 @@ jobs:
       - name: lint
         run: yarn lint
       - name: test
-        run: test:ci
+        run: yarn test:ci
