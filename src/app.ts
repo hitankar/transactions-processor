@@ -2,6 +2,7 @@ import { TransactionProcessor } from './lib/transaction';
 import logger from './lib/logger';
 import Store from './lib/persistence/store';
 import InMemoryAdapter from './lib/persistence/adapter/in-memory.adapter';
+import { Transaction } from 'transaction';
 
 
 const urlRoot = 'https://resttest.bench.co/transactions';
