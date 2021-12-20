@@ -5,11 +5,12 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       level: 'info',
       format: winston.format.combine(
-        winston.format.prettyPrint()
+        winston.format.prettyPrint(),
+        winston.format.cli()
       ),
-      silent: process.argv.indexOf('--silent') >= 0
-    })
-  ]
+      silent: process.argv.indexOf('--silent') >= 0,
+    }),
+  ],
 });
 
 export default logger;

@@ -14,7 +14,7 @@
 		"start": "yarn build && node ./dist/app.js"
 	},
 	"dependencies": {
-		"axios": "^0.24.0",
+		"axios": "~0.24.0",
 		"dotenv": "8.2.0",
 		"node": ">=15.3.0",
 		"winston": "3.3.3",
@@ -22,16 +22,17 @@
 	},
 	"devDependencies": {
 		"@types/jest": "^26.0.23",
-		"@types/jquery": "3.5.5",
-		"@types/lodash": "^4.14.170",
 		"@types/node": "~15.3.0",
-		"@typescript-eslint/eslint-plugin": "4.14.2",
-		"@typescript-eslint/parser": "4.14.2",
-		"eslint": "7.19.0",
+		"@typescript-eslint/eslint-plugin": "5.7.0",
+		"@typescript-eslint/parser": "5.7.0",
+		"eslint": "8.5.0",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"eslint-plugin-promise": "^6.0.0",
 		"jest": "^27.0.6",
-		"nodemon": "^2.0.7",
+		"prettier": "^2.5.1",
 		"ts-jest": "^27.0.3",
-		"ts-node": "9.1.1",
-		"typescript": "4.2.3"
+		"ts-node": "10.4.0",
+		"typescript": "4.5.4"
 	}
 }

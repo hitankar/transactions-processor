@@ -4,52 +4,56 @@ import Store from './persistence/store';
 import InMemoryAdapter from './persistence/adapter/in-memory.adapter';
 import { Transaction, TransactionPage } from 'transaction';
 
-
 export class TransactionProcessor {
   public constructor(
     private readonly urlRoot: string,
-    private readonly store: Store<Transaction>,
+    private readonly store: Store<Transaction>
   ) {}
 
   /**
    * Recursive function to fetch from API until the last page is read.
    * Time Complexity: O(n * m) n = no. of pages, m = no. of transactions per page.
-   * 
+   *
    * @param page page to fetch. by default page = 1
    * @param processed number of transactions read
    * @returns void
    */
-  public async getTransactionPage(page: number = 1, processed: number = 0): Promise<void> {
-  
+  public async getTransactionPage(
+    page: number = 1,
+    processed: number = 0
+  ): Promise<void> {
+    console.log(page);
     try {
-      const { data } = await axios.get<TransactionPage>(`${this.urlRoot}/${page}.json`);
-      if(data.totalCount === 0) return;
+      const { data } = await axios.get<TransactionPage>(
+        `${this.urlRoot}/${page}.json`
+      );
 
-      processed = processed + data.transactions?.length; 
+      if (data.totalCount === 0) return;
+
+      processed = processed + data.transactions?.length;
+
+      // add to existing data
       await this.store.append(data.transactions);
 
       if (processed < data.totalCount) {
-        await this.getTransactionPage(++page, processed) ;
+        await this.getTransactionPage(++page, processed);
       }
     } catch (e) {
       logger.error(e);
     }
-    
   }
 
   /**
- * Accepts transactions, processes to return a hashmap of daily balances
- * @param transactions transactions to calculate balances
- * @returns HashMap of daily balances
- */
+   * Accepts transactions, processes to return a hashmap of daily balances
+   * @param transactions transactions to calculate balances
+   * @returns HashMap of daily balances
+   */
   public async process(): Promise<Map<string, number>> {
-
     const transactions = await this.store.getAll();
-
 
     const map = new Map<string, number>();
 
-    transactions.forEach(t => { 
+    transactions.forEach((t) => {
       let amount = parseFloat(t.Amount);
 
       if (map.has(t.Date)) {
@@ -60,6 +64,5 @@ export class TransactionProcessor {
     });
 
     return map;
-
   }
 }

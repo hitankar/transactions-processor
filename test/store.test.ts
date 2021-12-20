@@ -4,7 +4,6 @@ import transactions from './fixtures/transactions';
 import InMemoryAdapter from './__mocks__/in-memory.adapter';
 
 describe('Store', () => {
-
   jest.mock('../src/lib/persistence/adapter/in-memory.adapter');
 
   beforeEach(() => {
@@ -12,7 +11,7 @@ describe('Store', () => {
     InMemoryAdapter.mockImplementationOnce(() => {
       return {
         get: jest.fn().mockImplementationOnce(() => transactions),
-        set: jest.fn()
+        set: jest.fn(),
       };
     });
   });
@@ -21,18 +20,17 @@ describe('Store', () => {
     InMemoryAdapter.mockRestore();
   });
 
-  test('Instantiate store', async()  => {
+  test('Instantiate store', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store('keyName', adapter);
     expect(s).toBeInstanceOf(Store);
     InMemoryAdapter.mockRestore();
   });
 
-  test('append method', async()  => {
-
+  test('append method', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store<Transaction>('keyName', adapter);
-    
+
     jest.spyOn(s, 'append');
     await s.append(transactions);
     expect(s.append).toBeCalled();
@@ -42,12 +40,10 @@ describe('Store', () => {
   test('getAll returns data based on key', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store<Transaction>('keyName', adapter);
-    
+
     jest.spyOn(s, 'getAll');
     const result = await s.getAll();
     expect(s.getAll).toBeCalled();
     expect(result).toEqual(transactions);
-
   });
-
 });

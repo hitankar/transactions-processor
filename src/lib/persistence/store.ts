@@ -2,7 +2,7 @@ import Adapter from './adapter/adapter';
 
 export default class Store<T> {
   constructor(
-    private readonly key: string, 
+    private readonly key: string,
     private readonly adapter: Adapter<T[]>
   ) {}
 
@@ -27,8 +27,7 @@ export default class Store<T> {
    * Get value of key and return as an array
    * @returns returns array of T
    */
-  async getAll():Promise<T[]> {
+  async getAll(): Promise<T[]> {
     return await this.adapter.get(this.key);
   }
-
 }
