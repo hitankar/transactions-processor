@@ -3,7 +3,7 @@ name: Node CI
 on: [push, pull_request]
 
 jobs:
-  build-node:
+  test-app:
     runs-on: ubuntu-latest
 
     steps:

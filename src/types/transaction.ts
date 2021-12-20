@@ -1,12 +1,12 @@
 
-type Transaction = {
+export type Transaction = {
   Date: string;
   Ledger: string;
   Amount: string;
   Company: string;
 }
 
-type TransactionPage = {
+export type TransactionPage = {
   totalCount: number;
   page: number;
   transactions: Array<Transaction>;

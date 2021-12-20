@@ -9,14 +9,15 @@
 		"build": "yarn build-ts && yarn lint",
 		"debug": "yarn build && yarn watch-debug",
 		"lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
-		"test": "jest --forceExit --silent --detectOpenHandles",
-		"test:ci": "jest --forceExit --detectOpenHandles --coverage --runInBand --reporters='default' --ci --silent",
+		"test": "set NODE_ENV=test & jest --forceExit --verbose --detectOpenHandles",
+		"test:ci": "NODE_ENV=test jest --forceExit --detectOpenHandles --coverage --runInBand --reporters='default' --ci --silent",
 		"start": "yarn build && node ./dist/app.js"
 	},
 	"dependencies": {
 		"axios": "^0.24.0",
 		"dotenv": "8.2.0",
 		"node": ">=15.3.0",
+		"redis": "^4.0.1",
 		"winston": "3.3.3",
 		"yarn": ">=1.22.17"
 	},
