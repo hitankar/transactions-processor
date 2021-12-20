@@ -1,7 +1,6 @@
 import axios from 'axios';
 import logger from './logger';
 import Store from './persistence/store';
-import InMemoryAdapter from './persistence/adapter/in-memory.adapter';
 import { Transaction, TransactionPage } from 'transaction';
 
 export class TransactionProcessor {
