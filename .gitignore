@@ -13,8 +13,8 @@ logs
 results
 tmp
 
-# Build
-public/css/main.css
+# vscode
+.vscode
 
 # Coverage reports
 coverage

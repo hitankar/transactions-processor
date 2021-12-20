@@ -9,7 +9,6 @@ const urlRoot = 'https://resttest.bench.co/transactions';
 
 (async (): Promise<void> => {
   try {
-    // const map =  await getTransactions(urlRoot);
     const store = new Store<Transaction>(
       'transactions',
       new InMemoryAdapter()

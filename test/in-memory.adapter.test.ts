@@ -1,7 +1,5 @@
 import InMemoryAdapter from '../src/lib/persistence/adapter/in-memory.adapter';
-import Store from '../src/lib/persistence/store';
 import { Transaction } from '../src/types/transaction';
-import transactions from './fixtures/transactions';
 
 describe('In Memory adapter', () => {
 
