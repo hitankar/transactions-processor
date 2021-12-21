@@ -60,7 +60,7 @@ I created data abstraction to store the transactions. The `Store` (which is resp
 
 For simplicity, I created a `InMemory` adapter where the data is stored in an HashMap as in array. In the future, additional adapters can be add to implement scalable solution using persistent store like Redis, MongoDB, etc.
 
-# Limitation and Improvements
+# Limitations and Improvements
 
 - The entire process of fetching to processing of transaction happens in a single invocation. This is necessary because we are storing the data in memory. However, the logic the split into two methods, and if third party stores like `Redis` or a NoSQL db is used (with custom adapters), we can invoke fetching and processing for daily balances in separate invocations. Technically, this would allow us to scale up for large transaction list and be able to calculate without needing to re-fetch the data from the API.
 
