@@ -28,7 +28,7 @@ Execute the application from the cli by running `yarn start`.
 Run unit tests with `yarn test`.
 
 ## CI
-The code used GHA to enable continous integration. On a push or PR, the code is compiled, linted and unit tested.
+The code uses GitHub Actions to enable continous integration. On a push or PR, the code is compiled, linted and unit tested.
 
 # Implementation
 ## Problem
@@ -62,6 +62,8 @@ For simplicity, I created a `InMemory` adapter where the data is stored in an Ha
 
 # Limitation and Improvements
 
-- The entire process of fetching to processing of transaction happens in a single invocation. This is necessary because we are storing the data in memory. However, the logic the split into two methods, and if third party stores like `Redis` or a NoSQL db are used (with custom adapters), we can invoke fetching and processing for daily balances in separate invocations. Technically, this would allow us to scale up for large transaction list and be able to calculate without needing to re-fetch the data from the API.
+- The entire process of fetching to processing of transaction happens in a single invocation. This is necessary because we are storing the data in memory. However, the logic the split into two methods, and if third party stores like `Redis` or a NoSQL db is used (with custom adapters), we can invoke fetching and processing for daily balances in separate invocations. Technically, this would allow us to scale up for large transaction list and be able to calculate without needing to re-fetch the data from the API.
 
 - The `Amount` in a transaction is a floating point number. In JavaScript adding two such number yield unexpectedly long decimal values eg. `0.21 + 0.12 = 0.32999999999999996`. Currently, the balances are stored as is and formatted correctly when logged. As an improvement, the total could be stored in correct format eg. `0.33`.
+
+- As an improvement we can add a git-hook to run linting and formatting to keep code style consistent.
