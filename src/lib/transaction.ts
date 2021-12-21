@@ -37,7 +37,7 @@ export class TransactionProcessor {
         await this.getTransactionPage(++page, processed);
       }
     } catch (e) {
-      logger.error(e);
+      logger.error(JSON.stringify(e));
     }
   }
 
@@ -51,7 +51,7 @@ export class TransactionProcessor {
 
     const map = new Map<string, number>();
 
-    transactions.forEach((t) => {
+    transactions?.forEach((t) => {
       let amount = parseFloat(t.Amount);
 
       if (map.has(t.Date)) {

@@ -1,6 +1,6 @@
 [![Node CI](https://github.com/hitankar/transactions-processor/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/hitankar/transactions-processor/actions/workflows/nodejs.yml)
 
-# README
+# Transactions &amp; Daily Balances
 
 CLI application to extract financial transactions from paged API endpoints, process to log daily balances
 
@@ -17,6 +17,8 @@ CLI application to extract financial transactions from paged API endpoints, proc
 - Yarn v1.x.x as package manager.
 
 ## Steps to setup
+- Copy .env.example file to .env
+- Fill in the value of `API_ROOT` eg. `https://example.com/transactions`
 - Run `yarn` from project root folder.
 - Run `yarn build` to run linting and compile TypeScript code to JavaScript. The generated code is the dist folder.
 
@@ -47,7 +49,7 @@ The code used GHA to enable continous integration. On a push or PR, the code is 
 ### Error handling
 Fetching errors are silently handled and logged without crashing the application. The daily transaction will be calculated based on the transactions it stored while iterating through the endpoints.
 
-### Calulating daily balances
+### Calculating daily balances
 
 We will also need to calculate daily balances from the transaction data that is stored. A function processes through stored transactions and calculate daily balance that is then store to a HashMap.
 
