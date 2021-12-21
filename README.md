@@ -1,44 +1,65 @@
-# Transactions
+[![Node CI](https://github.com/hitankar/transactions-processor/actions/workflows/nodejs.yml/badge.svg?branch=main)](https://github.com/hitankar/transactions-processor/actions/workflows/nodejs.yml)
+
+# README
 
 CLI application to extract financial transactions from paged API endpoints, process to log daily balances
 
 # Stack
-The application is build using Node and TypeScript.
+- The application is built using NodeJS. Code is written in TypeScript.
+- Linting and formatting with ESLint and Prettier.
+- Units tests using Jest.
+- Logging using Winston logger.
 
 # Installation
 
 ## Minimum requirements
-- Node v15 or above.
-- Yarn as package manager.
+- Node v16 or above.
+- Yarn v1.x.x as package manager.
 
 ## Steps to setup
 - Run `yarn` from project root folder.
-- Run `yarn build` to run linting and build TypeScript code. The generated code is the dist folder.
+- Run `yarn build` to run linting and compile TypeScript code to JavaScript. The generated code is the dist folder.
 
 Execute the application from the cli by running `yarn start`.
 
 # Tests
 Run unit tests with `yarn test`.
 
+## CI
+The code used GHA to enable continous integration. On a push or PR, the code is compiled, linted and unit tested.
+
 # Implementation
-## Consuming the API
+## Problem
 
-Based on the question, the API is paged however, it has a separate each URL. The dates for each transactions are variable. This means we can do two things. 
+- The transactions are spread across multiple pages which are represented by a different API endpoint. 
+- The dates for each transactions within each page are variable. This means we can do two things. 
+- Multiple pages can add up to large set of transactions.
+- Transactions per page may / may not be constant.
 
-- Execute recursively to fetch transactions from the API.
-- Storing all the transaction to a store (here, we are using an array);
+## Solution
 
+### Fetching transactions from the API
+- Execute recursively to fetch transactions from the API until the total number of transactions matches the processed transactions.
+- Transactions are intially stored in-memory (or to a persistence database, see below).
+- Fetching of transactions happens in O(n * m) where n = no. of pages and m = no. of transactions per page. If number of transactions per page remains constant, time complexity can be effectively O(n) which is linear time.
+- Space complexity is O(n) where n = no. of transactions.
 
-## Calulating daily balances
+### Error handling
+Fetching errors are silently handled and logged without crashing the application. The daily transaction will be calculated based on the transactions it stored while iterating through the endpoints.
 
-We will also need to transform the transaction data that is stored in the array. A function is needed to process through this array and calculate daily balance and store to a HashMap, which can be used log the values.
+### Calulating daily balances
 
-# Improvements
-As part of making this code scalable. It might make sense to use some persistent store to save the transactions pulled out from the API. The understanding is that the stored data doesn't have to persist very long but needs to be accessible quickly. One way to achieve this is using `Redis`.
+We will also need to calculate daily balances from the transaction data that is stored. A function processes through stored transactions and calculate daily balance that is then store to a HashMap.
 
-- ~~Approach this problem as you would in the real-world. Consider errors that may occur when fetching data from the API such as non-200 http responses.~~
-- Consider scalability when picking data abstractions and algorithms; what would happen if the transaction list was considerably larger?
-- ~~Coding style matters. Ensure your code is consistent and easy to follow. Leave comments where appropriate and use meaningful methods and variables.~~
-- ~~Avoid overly complex code. The complexity of the solution should make sense for the problems you're solving.~~
-- Document limitations and trade-offs of your code if appropriate.
-Include a README explaining how to install and/or run your software.
+Time complexity is O(n) where n is total number of transactions. Space complexity is O(n) here n is number of dates/entries. 
+
+### Storing transactions
+I created data abstraction to store the transactions. The `Store` (which is responsible for keeping the transactions) accepts an `Adapter`. 
+
+For simplicity, I created a `InMemory` adapter where the data is stored in an HashMap as in array. In the future, additional adapters can be add to implement scalable solution using persistent store like Redis, MongoDB, etc.
+
+# Limitation and Improvements
+
+- The entire process of fetching to processing of transaction happens in a single invocation. This is necessary because we are storing the data in memory. However, the logic the split into two methods, and if third party stores like `Redis` or a NoSQL db are used (with custom adapters), we can invoke fetching and processing for daily balances in separate invocations. Technically, this would allow us to scale up for large transaction list and be able to calculate without needing to re-fetch the data from the API.
+
+- The `Amount` in a transaction is a floating point number. In JavaScript adding two such number yield unexpectedly long decimal values eg. `0.21 + 0.12 = 0.32999999999999996`. Currently, the balances are stored as is and formatted correctly when logged. As an improvement, the total could be stored in correct format eg. `0.33`.

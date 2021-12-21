@@ -11,3 +11,5 @@ export type TransactionPage = {
   page: number;
   transactions: Array<Transaction>;
 }
+
+export type DailyBalances = Map<string, number>;

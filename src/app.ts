@@ -8,12 +8,17 @@ const urlRoot = 'https://resttest.bench.co/transactions';
 
 (async (): Promise<void> => {
   try {
+
+    // new store instance with in memory adapter.
+    // We can use Redis by implementing a RedisAdapter and passing it in the constructor
     const store = new Store<Transaction>('transactions', new InMemoryAdapter());
     const transactionProcessor = new TransactionProcessor(urlRoot, store);
+    
     await transactionProcessor.getTransactionPage();
-    const map = await transactionProcessor.process();
-    for (const t of map.entries()) {
-      logger.log('info', `${t[0]} - ${t[1].toFixed(2)}`);
+    const dailyBalances = await transactionProcessor.process();
+
+    for (const balance of dailyBalances.entries()) {
+      logger.info(`| ${balance[0]} | ${balance[1].toFixed(2)}`);
     }
   } catch (e) {
     throw new Error(e);

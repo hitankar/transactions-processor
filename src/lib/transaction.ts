@@ -1,7 +1,7 @@
 import axios from 'axios';
 import logger from './logger';
 import Store from './persistence/store';
-import { Transaction, TransactionPage } from 'transaction';
+import { DailyBalances, Transaction, TransactionPage } from 'transaction';
 
 export class TransactionProcessor {
   public constructor(
@@ -21,7 +21,6 @@ export class TransactionProcessor {
     page: number = 1,
     processed: number = 0
   ): Promise<void> {
-    console.log(page);
     try {
       const { data } = await axios.get<TransactionPage>(
         `${this.urlRoot}/${page}.json`
@@ -47,7 +46,7 @@ export class TransactionProcessor {
    * @param transactions transactions to calculate balances
    * @returns HashMap of daily balances
    */
-  public async process(): Promise<Map<string, number>> {
+  public async process(): Promise<DailyBalances> {
     const transactions = await this.store.getAll();
 
     const map = new Map<string, number>();
