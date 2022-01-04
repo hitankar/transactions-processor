@@ -67,3 +67,4 @@ For simplicity, I created a `InMemory` adapter where the data is stored in an Ha
 - The `Amount` in a transaction is a floating point number. In JavaScript adding two such number yield unexpectedly long decimal values eg. `0.21 + 0.12 = 0.32999999999999996`. Currently, the balances are stored as is and formatted correctly when logged. As an improvement, the total could be stored in correct format eg. `0.33`.
 
 - As an improvement we can add a git-hook to run linting and formatting to keep code style consistent.
+- `Dockerization`: we can dockerize local development in order to emulate the production environment.

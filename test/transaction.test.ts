@@ -5,7 +5,7 @@ import * as mockedNoTransactions from './fixtures/no-transactions.json';
 import axios from './__mocks__/axios';
 import Store from './__mocks__/store';
 
-describe('Transaction processor', () => {
+describe('When processing transactions...', () => {
   jest.mock('../src/lib/persistence/store');
 
   beforeEach(() => {
@@ -17,14 +17,13 @@ describe('Transaction processor', () => {
     Store.mockRestore();
   });
 
-  test('instatiate class', async () => {
+  test('TransactionProcessor class should be instantiated', async () => {
     const store = new Store();
     const t = new TransactionProcessor('http://root', store);
     expect(t).toBeInstanceOf(TransactionProcessor);
-    Store.mockRestore();
   });
 
-  test('process method returns map of daily balances', async () => {
+  test('process() returns map of daily balances', async () => {
     Store.mockImplementationOnce(() => {
       const mockedTransactions = [
         {
@@ -68,10 +67,9 @@ describe('Transaction processor', () => {
     ]);
 
     expect(value).toEqual(map);
-    Store.mockRestore();
   });
 
-  test('getTransactionPage should fetch each page', async () => {
+  test('getTransactionPage() should fetch each page', async () => {
     axios.get
       .mockImplementationOnce(
         async () => await Promise.resolve({ data: mockedPage1 })
@@ -94,10 +92,9 @@ describe('Transaction processor', () => {
     expect(t.getTransactionPage).toBeCalledTimes(2);
     expect(t.getTransactionPage).toHaveBeenLastCalledWith(2, 4);
     axios.get.mockRestore();
-    Store.mockRestore();
   });
 
-  it('process method should return empty map if no transactions are received', async () => {
+  it('process() should return empty map if no transactions are received', async () => {
     axios.get.mockImplementationOnce(
       async () => await Promise.resolve({ data: mockedNoTransactions })
     );
@@ -121,7 +118,7 @@ describe('Transaction processor', () => {
     axios.get.mockRestore();
   });
 
-  test('axios error should invoke process method', async () => {
+  test('axios error should not stop from invoking process()', async () => {
     axios.get.mockImplementationOnce(async () => {
       throw new Error();
     });
@@ -146,6 +143,5 @@ describe('Transaction processor', () => {
     expect(t.process).toBeCalled();
     expect(result).toEqual(response);
     axios.get.mockRestore();
-    Store.mockRestore();
   });
 });

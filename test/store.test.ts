@@ -3,7 +3,7 @@ import { Transaction } from '../src/types/transaction';
 import transactions from './fixtures/transactions';
 import InMemoryAdapter from './__mocks__/in-memory.adapter';
 
-describe('Store', () => {
+describe('Store class', () => {
   jest.mock('../src/lib/persistence/adapter/in-memory.adapter');
 
   beforeEach(() => {
@@ -20,14 +20,14 @@ describe('Store', () => {
     InMemoryAdapter.mockRestore();
   });
 
-  test('Instantiate store', async () => {
+  test('Store class can instantiated with an adapter', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store('keyName', adapter);
     expect(s).toBeInstanceOf(Store);
     InMemoryAdapter.mockRestore();
   });
 
-  test('append method', async () => {
+  test('append() can be invoked by passing transactions', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store<Transaction>('keyName', adapter);
 
@@ -37,7 +37,7 @@ describe('Store', () => {
     expect(s.append).toHaveBeenCalledWith(transactions);
   });
 
-  test('getAll returns data based on key', async () => {
+  test('getAll() returns data based on key', async () => {
     const adapter = new InMemoryAdapter();
     const s = new Store<Transaction>('keyName', adapter);
 

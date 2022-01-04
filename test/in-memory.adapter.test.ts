@@ -1,13 +1,13 @@
 import InMemoryAdapter from '../src/lib/persistence/adapter/in-memory.adapter';
 import { Transaction } from '../src/types/transaction';
 
-describe('In Memory adapter', () => {
+describe('InMemoryAdapter class', () => {
   test('Instantiate adapter', async () => {
     const adapter = new InMemoryAdapter();
     expect(adapter).toBeInstanceOf(InMemoryAdapter);
   });
 
-  it('setting a value with set can be retrieved with get', async () => {
+  test('Setting a value with set() can be retrieved with get()', async () => {
     const adapter = new InMemoryAdapter<Transaction[]>();
     const data = [
       {
